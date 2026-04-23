@@ -8,7 +8,7 @@ use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 
 /**
- * OAuth2 provider for Acquia ID (id.acquia.com).
+ * OAuth2 provider for Acquia ID (staging.id.acquia.com).
  */
 class AcquiaIdProvider extends IdpProvider {
 

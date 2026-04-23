@@ -20,7 +20,7 @@ final class MockedIdpMiddleware {
   public function __invoke(): callable {
     return static function (callable $handler): callable {
       return static function (RequestInterface $request, array $options) use ($handler): PromiseInterface {
-        if ($request->getUri()->getHost() !== 'id.acquia.com') {
+        if ($request->getUri()->getHost() !== 'staging.id.acquia.com') {
           return $handler($request, $options);
         }
         $path = $request->getUri()->getPath();

@@ -19,8 +19,8 @@ use PHPUnit\Framework\Attributes\Group;
 #[Group('acquia_id')]
 class LogoutResponseGeneratorTest extends UnitTestCase {
 
-  private const IDP_BASE_URI = 'https://id.acquia.com/oauth2/default';
-  private const LOGOUT_REDIRECT_URI = 'https://cloud.acquia.com';
+  private const IDP_BASE_URI = 'https://staging.id.acquia.com/oauth2/default';
+  private const LOGOUT_REDIRECT_URI = 'https://staging.cloud.acquia.com';
   private const USER_ID = 42;
   private const STORAGE_KEY = 'acquia_id_access_token';
 

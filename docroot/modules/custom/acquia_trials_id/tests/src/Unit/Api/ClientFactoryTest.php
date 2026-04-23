@@ -23,7 +23,7 @@ class ClientFactoryTest extends UnitTestCase {
     $httpClientFactory->expects($this->once())
       ->method('fromOptions')
       ->with([
-        'base_uri' => 'https://cloud.acquia.com',
+        'base_uri' => 'https://staging.cloud.acquia.com',
         'headers' => [
           'Accept' => 'application/json, version=2',
           'Authorization' => 'Bearer test-token-xyz',
@@ -31,7 +31,7 @@ class ClientFactoryTest extends UnitTestCase {
       ])
       ->willReturn($httpClient);
 
-    $factory = new ClientFactory($httpClientFactory, 'https://cloud.acquia.com');
+    $factory = new ClientFactory($httpClientFactory, 'https://staging.cloud.acquia.com');
     $client = $factory->get('test-token-xyz');
 
     $this->assertInstanceOf(Client::class, $client);

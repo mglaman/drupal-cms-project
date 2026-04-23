@@ -20,7 +20,7 @@ final class MockedCloudApiMiddleware {
   public function __invoke(): callable {
     return static function (callable $handler): callable {
       return static function (RequestInterface $request, array $options) use ($handler): PromiseInterface {
-        if ($request->getUri()->getHost() !== 'cloud.acquia.com') {
+        if ($request->getUri()->getHost() !== 'staging.cloud.acquia.com') {
           return $handler($request, $options);
         }
 

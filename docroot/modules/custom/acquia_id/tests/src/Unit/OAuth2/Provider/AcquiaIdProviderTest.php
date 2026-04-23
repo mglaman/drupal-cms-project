@@ -23,20 +23,20 @@ class AcquiaIdProviderTest extends UnitTestCase {
       'redirectUri' => 'https://example.com/callback',
     ]);
     $this->provider
-      ->setIdpBaseUri('https://id.acquia.com/oauth2/default')
-      ->setCloudApiBaseUri('https://cloud.acquia.com');
+      ->setIdpBaseUri('https://staging.id.acquia.com/oauth2/default')
+      ->setCloudApiBaseUri('https://staging.cloud.acquia.com');
   }
 
   public function testBaseAuthorizationUrl(): void {
     $this->assertSame(
-      'https://id.acquia.com/oauth2/default/v1/authorize',
+      'https://staging.id.acquia.com/oauth2/default/v1/authorize',
       $this->provider->getBaseAuthorizationUrl(),
     );
   }
 
   public function testBaseAccessTokenUrl(): void {
     $this->assertSame(
-      'https://id.acquia.com/oauth2/default/v1/token',
+      'https://staging.id.acquia.com/oauth2/default/v1/token',
       $this->provider->getBaseAccessTokenUrl([]),
     );
   }
@@ -44,7 +44,7 @@ class AcquiaIdProviderTest extends UnitTestCase {
   public function testResourceOwnerDetailsUrl(): void {
     $token = new AccessToken(['access_token' => 'test', 'expires_in' => 3600]);
     $this->assertSame(
-      'https://cloud.acquia.com/api/account',
+      'https://staging.cloud.acquia.com/api/account',
       $this->provider->getResourceOwnerDetailsUrl($token),
     );
   }
