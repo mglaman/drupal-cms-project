@@ -3,7 +3,6 @@ services:
     class: Drupal\acquia_trials_id\Api\ClientFactory
     arguments:
       - '@http_client_factory'
-      - '%acquia_id.cloud_api_base_uri%'
 
   Drupal\acquia_trials_id\EventSubscriber\OAuth2AuthorizationEventSubscriber:
     arguments:

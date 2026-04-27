@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\acquia_id\Unit\OAuth2;
 
+use Drupal\acquia_id\AcquiaEnvironmentUrls;
 use Drupal\acquia_id\OAuth2\AccessTokenRepository;
 use Drupal\acquia_id\OAuth2\LogoutResponseGenerator;
 use Drupal\acquia_id\OAuth2\ProviderFactory;
@@ -19,8 +20,6 @@ use PHPUnit\Framework\Attributes\Group;
 #[Group('acquia_id')]
 class LogoutResponseGeneratorTest extends UnitTestCase {
 
-  private const IDP_BASE_URI = 'https://staging.id.acquia.com/oauth2/default';
-  private const LOGOUT_REDIRECT_URI = 'https://staging.cloud.acquia.com';
   private const USER_ID = 42;
   private const STORAGE_KEY = 'acquia_id_access_token';
 
@@ -33,8 +32,6 @@ class LogoutResponseGeneratorTest extends UnitTestCase {
 
     $repository = $this->buildRepository($token);
     $generator = new LogoutResponseGenerator(
-      self::IDP_BASE_URI,
-      self::LOGOUT_REDIRECT_URI,
       $repository,
       $this->buildAccount(),
     );
@@ -42,7 +39,7 @@ class LogoutResponseGeneratorTest extends UnitTestCase {
     $response = $generator->get();
 
     $this->assertStringContainsString(
-      self::IDP_BASE_URI . '/v1/logout',
+      AcquiaEnvironmentUrls::idpBaseUri('dev') . '/v1/logout',
       $response->getTargetUrl(),
     );
     $this->assertStringContainsString(
@@ -50,7 +47,7 @@ class LogoutResponseGeneratorTest extends UnitTestCase {
       $response->getTargetUrl(),
     );
     $this->assertStringContainsString(
-      'post_logout_redirect_uri=' . self::LOGOUT_REDIRECT_URI,
+      'post_logout_redirect_uri=' . AcquiaEnvironmentUrls::logoutRedirectUri('dev'),
       $response->getTargetUrl(),
     );
     $this->assertSame(0, $response->getCacheableMetadata()->getCacheMaxAge());
@@ -59,15 +56,13 @@ class LogoutResponseGeneratorTest extends UnitTestCase {
   public function testRedirectsToLogoutUriWhenNoTokenStored(): void {
     $repository = $this->buildRepository(NULL);
     $generator = new LogoutResponseGenerator(
-      self::IDP_BASE_URI,
-      self::LOGOUT_REDIRECT_URI,
       $repository,
       $this->buildAccount(),
     );
 
     $response = $generator->get();
 
-    $this->assertSame(self::LOGOUT_REDIRECT_URI, $response->getTargetUrl());
+    $this->assertSame(AcquiaEnvironmentUrls::logoutRedirectUri('dev'), $response->getTargetUrl());
     $this->assertSame(0, $response->getCacheableMetadata()->getCacheMaxAge());
   }
 
@@ -78,15 +73,13 @@ class LogoutResponseGeneratorTest extends UnitTestCase {
       storedMinutesAgo: 91,
     );
     $generator = new LogoutResponseGenerator(
-      self::IDP_BASE_URI,
-      self::LOGOUT_REDIRECT_URI,
       $repository,
       $this->buildAccount(),
     );
 
     $response = $generator->get();
 
-    $this->assertSame(self::LOGOUT_REDIRECT_URI, $response->getTargetUrl());
+    $this->assertSame(AcquiaEnvironmentUrls::logoutRedirectUri('dev'), $response->getTargetUrl());
     $this->assertSame(0, $response->getCacheableMetadata()->getCacheMaxAge());
   }
 

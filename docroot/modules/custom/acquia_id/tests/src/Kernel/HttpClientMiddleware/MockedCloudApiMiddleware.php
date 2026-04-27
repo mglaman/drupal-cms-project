@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\acquia_id\Kernel\HttpClientMiddleware;
 
+use Drupal\acquia_id\AcquiaEnvironmentUrls;
 use Drupal\Component\Serialization\Json;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -20,7 +21,7 @@ final class MockedCloudApiMiddleware {
   public function __invoke(): callable {
     return static function (callable $handler): callable {
       return static function (RequestInterface $request, array $options) use ($handler): PromiseInterface {
-        if ($request->getUri()->getHost() !== 'staging.cloud.acquia.com') {
+        if ($request->getUri()->getHost() !== AcquiaEnvironmentUrls::cloudApiHost('dev')) {
           return $handler($request, $options);
         }
 

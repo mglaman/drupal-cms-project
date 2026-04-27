@@ -1,6 +1,6 @@
 name: 'Acquia ID'
 type: module
-description: 'OAuth2 single sign-on via Acquia ID (id.acquia.com).'
+description: 'OAuth2 single sign-on via Acquia ID.'
 package: Acquia
 core_version_requirement: ^11
 dependencies:

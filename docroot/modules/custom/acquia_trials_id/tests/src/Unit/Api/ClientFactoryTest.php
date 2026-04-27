@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\acquia_trials_id\Unit\Api;
 
+use Drupal\acquia_id\AcquiaEnvironmentUrls;
 use Drupal\acquia_trials_id\Api\Client;
 use Drupal\acquia_trials_id\Api\ClientFactory;
 use Drupal\Core\Http\ClientFactory as HttpClientFactory;
@@ -23,7 +24,7 @@ class ClientFactoryTest extends UnitTestCase {
     $httpClientFactory->expects($this->once())
       ->method('fromOptions')
       ->with([
-        'base_uri' => 'https://staging.cloud.acquia.com',
+        'base_uri' => AcquiaEnvironmentUrls::cloudApiBaseUri('dev'),
         'headers' => [
           'Accept' => 'application/json, version=2',
           'Authorization' => 'Bearer test-token-xyz',
@@ -31,7 +32,7 @@ class ClientFactoryTest extends UnitTestCase {
       ])
       ->willReturn($httpClient);
 
-    $factory = new ClientFactory($httpClientFactory, 'https://staging.cloud.acquia.com');
+    $factory = new ClientFactory($httpClientFactory);
     $client = $factory->get('test-token-xyz');
 
     $this->assertInstanceOf(Client::class, $client);

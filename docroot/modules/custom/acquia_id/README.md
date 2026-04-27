@@ -1,18 +1,18 @@
 # Acquia ID
 
-Provides OAuth2 single sign-on via Acquia ID (`staging.id.acquia.com`) using the PKCE authorization code flow.
+Provides OAuth2 single sign-on via Acquia ID using the PKCE authorization code flow.
 
 ## Configuration
 
-Set the following service parameters, typically in `settings.php` or a `services.yml` override:
+Set the following service parameter:
 
 ```yaml
 parameters:
   acquia_id.client_id: 'your-oauth2-client-id'
-  # These default to production values and only need overriding for non-production environments.
-  # acquia_id.idp_base_uri: 'https://staging.id.acquia.com/oauth2/default'
-  # acquia_id.cloud_api_base_uri: 'https://staging.cloud.acquia.com'
 ```
+
+The module derives the Acquia ID and Acquia Cloud base URLs from the
+`AH_SITE_ENVIRONMENT` environment variable at runtime.
 
 The SSO route is `/acquia-id/sso`.
 
@@ -21,7 +21,8 @@ The SSO route is `/acquia-id/sso`.
 This module dispatches `\Drupal\acquia_id\Events\OAuth2AuthorizationEvent` once the
 OAuth2 token exchange succeeds. **You must provide an event subscriber** that calls
 `$event->setUser($user)` with the resolved Drupal user entity. If no user is set
-after the event is dispatched, the SSO flow redirects to `idp_logout_redirect_uri`.
+after the event is dispatched, the SSO flow redirects to the environment-specific
+Acquia Cloud URL.
 
 Example subscriber:
 

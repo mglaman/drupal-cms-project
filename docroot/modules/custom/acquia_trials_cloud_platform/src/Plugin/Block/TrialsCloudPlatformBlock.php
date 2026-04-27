@@ -5,6 +5,7 @@ namespace Drupal\acquia_trials_cloud_platform\Plugin\Block;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\acquia_id\AcquiaEnvironmentUrls;
 
 /**
  * Provides the Acquia Trials Cloud Platform block.
@@ -38,10 +39,11 @@ class TrialsCloudPlatformBlock extends BlockBase {
       ],
     ];
 
+    $cloud_base = AcquiaEnvironmentUrls::cloudApiBaseUri();
     $subscription_id = getenv('AH_APPLICATION_UUID') ?: '';
     $cta_url = $subscription_id !== ''
-      ? 'https://staging.cloud.acquia.com/a/applications/' . $subscription_id
-      : 'https://staging.cloud.acquia.com';
+      ? $cloud_base . '/a/applications/' . $subscription_id
+      : $cloud_base;
 
     return [
       '#theme' => 'acquia_trials_cloud_platform',

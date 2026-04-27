@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\acquia_id\Kernel\Controller;
 
+use Drupal\acquia_id\AcquiaEnvironmentUrls;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Url;
 use Drupal\KernelTests\KernelTestBase;
@@ -72,7 +73,7 @@ class OAuth2ControllerTest extends KernelTestBase {
     $this->assertSame(Response::HTTP_SEE_OTHER, $response->getStatusCode());
     $location = $response->headers->get('Location');
     $this->assertStringContainsString(
-      'https://staging.id.acquia.com/oauth2/default/v1/authorize',
+      AcquiaEnvironmentUrls::idpBaseUri('dev') . '/v1/authorize',
       $location,
     );
     $this->assertStringContainsString('code_challenge=', $location);
@@ -96,7 +97,7 @@ class OAuth2ControllerTest extends KernelTestBase {
 
     $this->assertSame(Response::HTTP_SEE_OTHER, $response->getStatusCode());
     $this->assertStringContainsString(
-      'https://staging.id.acquia.com/oauth2/default/v1/authorize',
+      AcquiaEnvironmentUrls::idpBaseUri('dev') . '/v1/authorize',
       $response->headers->get('Location'),
     );
   }
@@ -146,7 +147,7 @@ class OAuth2ControllerTest extends KernelTestBase {
     $this->assertTrue($response->isRedirect());
     $this->assertSame(Response::HTTP_SEE_OTHER, $response->getStatusCode());
     $this->assertStringContainsString(
-      'https://staging.cloud.acquia.com',
+      AcquiaEnvironmentUrls::logoutRedirectUri('dev'),
       $response->headers->get('Location'),
     );
   }
@@ -163,7 +164,7 @@ class OAuth2ControllerTest extends KernelTestBase {
     $response = $this->doRequest($request);
 
     $this->assertStringContainsString(
-      'https://staging.id.acquia.com/oauth2/default/v1/authorize',
+      AcquiaEnvironmentUrls::idpBaseUri('dev') . '/v1/authorize',
       $response->headers->get('Location'),
     );
   }

@@ -4,3 +4,5 @@ description: 'Provides a block promoting Acquia Cloud Platform features.'
 package: Acquia Trials
 core_version_requirement: ^11
 hidden: true
+dependencies:
+  - acquia_id:acquia_id

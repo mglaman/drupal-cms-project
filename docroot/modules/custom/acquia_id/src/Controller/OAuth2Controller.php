@@ -12,6 +12,7 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\acquia_id\AcquiaEnvironmentUrls;
 use Drupal\acquia_id\Events\OAuth2AuthorizationEvent;
 use Drupal\acquia_id\OAuth2\AccessTokenRepository;
 use Drupal\acquia_id\OAuth2\Provider\AcquiaIdProvider;
@@ -39,7 +40,6 @@ final class OAuth2Controller implements ContainerInjectionInterface {
     private readonly SessionInterface $session,
     private readonly EventDispatcherInterface $eventDispatcher,
     private readonly AccessTokenRepository $accessTokenRepository,
-    private readonly string $idpLogoutRedirectUri,
   ) {
   }
 
@@ -52,7 +52,6 @@ final class OAuth2Controller implements ContainerInjectionInterface {
       $container->get('session'),
       $container->get('event_dispatcher'),
       $container->get('acquia_id.oauth2.access_token_repository'),
-      $container->getParameter('acquia_id.idp_logout_redirect_uri'),
     );
   }
 
@@ -150,7 +149,7 @@ final class OAuth2Controller implements ContainerInjectionInterface {
 
   private function accessDeniedRedirect(string $logMessage = 'Access denied'): RedirectResponse {
     $this->getLogger('acquia_id')->error($this->t('Error: @message', ['@message' => $logMessage]));
-    return new TrustedRedirectResponse($this->idpLogoutRedirectUri, Response::HTTP_SEE_OTHER);
+    return new TrustedRedirectResponse(AcquiaEnvironmentUrls::logoutRedirectUri(), Response::HTTP_SEE_OTHER);
   }
 
 }

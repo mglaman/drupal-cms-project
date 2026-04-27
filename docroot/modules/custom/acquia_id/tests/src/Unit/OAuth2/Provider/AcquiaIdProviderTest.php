@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\acquia_id\Unit\OAuth2\Provider;
 
+use Drupal\acquia_id\AcquiaEnvironmentUrls;
 use Drupal\acquia_id\OAuth2\Provider\AcquiaIdProvider;
 use Drupal\Tests\UnitTestCase;
 use League\OAuth2\Client\Token\AccessToken;
@@ -23,20 +24,20 @@ class AcquiaIdProviderTest extends UnitTestCase {
       'redirectUri' => 'https://example.com/callback',
     ]);
     $this->provider
-      ->setIdpBaseUri('https://staging.id.acquia.com/oauth2/default')
-      ->setCloudApiBaseUri('https://staging.cloud.acquia.com');
+      ->setIdpBaseUri(AcquiaEnvironmentUrls::idpBaseUri('dev'))
+      ->setCloudApiBaseUri(AcquiaEnvironmentUrls::cloudApiBaseUri('dev'));
   }
 
   public function testBaseAuthorizationUrl(): void {
     $this->assertSame(
-      'https://staging.id.acquia.com/oauth2/default/v1/authorize',
+      AcquiaEnvironmentUrls::idpBaseUri('dev') . '/v1/authorize',
       $this->provider->getBaseAuthorizationUrl(),
     );
   }
 
   public function testBaseAccessTokenUrl(): void {
     $this->assertSame(
-      'https://staging.id.acquia.com/oauth2/default/v1/token',
+      AcquiaEnvironmentUrls::idpBaseUri('dev') . '/v1/token',
       $this->provider->getBaseAccessTokenUrl([]),
     );
   }
@@ -44,7 +45,7 @@ class AcquiaIdProviderTest extends UnitTestCase {
   public function testResourceOwnerDetailsUrl(): void {
     $token = new AccessToken(['access_token' => 'test', 'expires_in' => 3600]);
     $this->assertSame(
-      'https://staging.cloud.acquia.com/api/account',
+      AcquiaEnvironmentUrls::cloudApiBaseUri('dev') . '/api/account',
       $this->provider->getResourceOwnerDetailsUrl($token),
     );
   }

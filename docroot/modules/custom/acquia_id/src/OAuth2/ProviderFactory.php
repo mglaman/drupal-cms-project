@@ -6,6 +6,7 @@ namespace Drupal\acquia_id\OAuth2;
 
 use Drupal\Core\Http\ClientFactory;
 use Drupal\Core\Url;
+use Drupal\acquia_id\AcquiaEnvironmentUrls;
 use Drupal\acquia_id\OAuth2\Provider\AcquiaIdProvider;
 
 class ProviderFactory {
@@ -13,8 +14,6 @@ class ProviderFactory {
   public function __construct(
     private readonly ClientFactory $httpClientFactory,
     private readonly string $clientId,
-    private readonly string $idpBaseUri,
-    private readonly string $cloudApiBaseUri,
   ) {
   }
 
@@ -24,8 +23,8 @@ class ProviderFactory {
       'redirectUri' => $this->getRedirectUri(),
     ]);
     $provider
-      ->setIdpBaseUri($this->idpBaseUri)
-      ->setCloudApiBaseUri($this->cloudApiBaseUri)
+      ->setIdpBaseUri(AcquiaEnvironmentUrls::idpBaseUri())
+      ->setCloudApiBaseUri(AcquiaEnvironmentUrls::cloudApiBaseUri())
       ->setHttpClient($this->httpClientFactory->fromOptions());
     return $provider;
   }
